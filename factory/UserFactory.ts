@@ -4,7 +4,6 @@ import { Role } from "@prisma/client"; // Prisma-Enum importieren
 
 const UserFactory = async () => {
   await prisma.user.deleteMany();
-  const company = await prisma.company.findFirst();
 
   const salt = 10;
   const hashedPassword = bcrypt.hashSync("password", salt);
@@ -14,9 +13,6 @@ const UserFactory = async () => {
     lastname: "Jürs",
     password: hashedPassword,
     email: "test@example.com",
-    test: "helloworld",
-    companyId: company?.id as number,
-    role: Role.ADMIN,
     createdAt: new Date(),
     updatedAt: new Date(),
   };

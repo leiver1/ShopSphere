@@ -3,206 +3,91 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql" // Oder "mysql" / "sqlite" / "mongodb"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id                 Int               @id @default(autoincrement())
-  firstname          String
-  lastname           String
-  email              String            @unique
-  test               String
-  password           String
-  companyId          Int
-  company            Company           @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  role               Role
-  createdAt          DateTime          @default(now())
-  updatedAt          DateTime          @updatedAt
-  Notification       Notification[]
-  OAuthState         OAuthState[]
-  SubscriptionPlan   SubscriptionPlan? @relation(fields: [subscriptionPlanId], references: [id])
-  subscriptionPlanId String?
+  id           Int             @id @default(autoincrement())
+  firstname    String
+  lastname     String
+  email        String          @unique
+  password     String
+  role         Role            @default(CUSTOMER)
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  ProductRevew ProductReview[]
+  Orders       Order[]
 }
 
 enum Role {
-  ADMIN
-  EDITOR
-  VIEWER
+  CUSTOMER
+  SELLER
 }
 
-model Company {
-  id                    Int                  @id @default(autoincrement())
-  name                  String
-  allowedSocialAccounts Int
-  users                 User[]
-  socialAccounts        SocialMediaAccount[]
-  posts                 Post[]
-  subscriptions         Subscription[]
-  automations           Automation[]
-  createdAt             DateTime             @default(now())
-  updatedAt             DateTime             @updatedAt
+model Product {
+  id               Int                @id @default(autoincrement())
+  title            String
+  description      String             @db.Text
+  price            Int
+  images           ProductImage[]
+  reviews          ProductReview[]
+  Orders           Order[]
+  ProductChoosable ProductChoosable[]
+  stock            Int
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
 }
 
-model OAuthState {
-  id        String   @id @default(cuid()) // Eindeutige ID
-  state     String   @unique // Der zufällig generierte CSRF-Schutz-Token (OAuth `state`)
-  userId    Int      @unique // Verknüpfung mit einem Nutzer
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  expiresAt DateTime // Ablaufdatum, um abgelaufene States zu löschen
-  createdAt DateTime @default(now()) // Zeitstempel der Erstellung
+// like Size:
+model ProductChoosable {
+  id             Int              @id @default(autoincrement())
+  productId      Int
+  Product        Product          @relation(fields: [productId], references: [id])
+  title          String
+  inputChoosable InputChoosable[]
 }
 
-model Subscription {
-  id                 Int                @id @default(autoincrement())
-  companyId          Int
-  company            Company            @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  plan               SubscriptionPlan   @relation(fields: [subscriptionPlanId], references: [id])
-  status             SubscriptionStatus
-  billingCycle       BillingCycle
-  nextPayment        DateTime?
-  createdAt          DateTime           @default(now())
-  updatedAt          DateTime           @updatedAt
-  subscriptionPlanId String
+//input like /M/S/XL/L...
+model InputChoosable {
+  id                 Int              @id @default(autoincrement())
+  productChoosableId Int
+  ProductChoosable   ProductChoosable @relation(fields: [productChoosableId], references: [id])
+  input              String
 }
 
-enum SubscriptionStatus {
-  ACTIVE
-  CANCELED
-  EXPIRED
+model ProductImage {
+  id        Int      @id @default(autoincrement())
+  productId Int
+  Product   Product? @relation(fields: [productId], references: [id])
+  src       String
 }
 
-enum BillingCycle {
-  MONTHLY
-  YEARLY
+model ProductReview {
+  id        Int      @id @default(autoincrement())
+  rating    Int
+  text      String   @db.Text
+  User      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  Product   Product  @relation(fields: [productId], references: [id])
+  productId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model SocialMediaAccount {
-  id             Int                  @id @default(autoincrement())
-  companyId      Int
-  company        Company              @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  platform       SocialPlatform
-  refreshToken   String?
-  userPlatformId String               @unique(length: 255) @db.Text
-  username       String
-  accessToken    String               @db.Text
-  type           AccountType
-  createdAt      DateTime             @default(now())
-  updatedAt      DateTime             @updatedAt
-  expiresAt      DateTime?
-  channels       SocialMediaChannel[] // Verknüpfung zu den Page-Tokens
-  Post           Post[]
-}
-
-model SocialMediaChannel {
-  id                 String             @id @default(uuid()) // Interne ID
-  socialAccountId    Int // Verknüpfung zum User Access Token
-  channelPlatformId  String             @unique // ID der Facebook-Seite oder des Instagram-Business-Accounts
-  channelName        String? // Anzeigename der Seite
-  accessToken        String             @db.Text // Verschlüsselter Page Access Token
-  expiresAt          DateTime? // Ablaufdatum des Page Tokens
-  createdAt          DateTime           @default(now())
-  updatedAt          DateTime           @updatedAt()
-  socialMediaAccount SocialMediaAccount @relation(fields: [socialAccountId], references: [id], onDelete: Cascade)
-  posts              Post[]
-}
-
-enum AccountType {
-  Channel
-  Account
-}
-
-enum SocialPlatform {
-  Facebook
-  Instagram
-  Linkedin
-  TikTok
-  Youtube
-  X
-}
-
-model Post {
-  id                   Int                 @id @default(autoincrement())
-  companyId            Int
-  company              Company             @relation(fields: [companyId], references: [id])
-  socialAccountId      Int
-  socialAccount        SocialMediaAccount  @relation(fields: [socialAccountId], references: [id])
-  content              String
-  mediaUrl             String?
-  scheduledAt          DateTime?
-  status               PostStatus
-  analytics            Analytics?
-  createdAt            DateTime            @default(now())
-  updatedAt            DateTime            @updatedAt
-  SocialMediaChannel   SocialMediaChannel? @relation(fields: [socialMediaChannelId], references: [id])
-  socialMediaChannelId String?
-}
-
-enum PostStatus {
-  DRAFT
-  SCHEDULED
-  POSTED
-  FAILED
-}
-
-model SubscriptionPlan {
-  id           String         @id @default(uuid()) // Unique Plan ID
-  name         String // Plan Name (e.g., Free, Pro, Enterprise)
-  maxChannels  Int // Max allowed social media channels
-  price        Float // Monthly price (if applicable)
-  users        User[] // Relation to Users
-  Subscription Subscription[]
-}
-
-model Analytics {
-  id          Int            @id @default(autoincrement())
-  postId      Int            @unique
-  post        Post           @relation(fields: [postId], references: [id])
-  platform    SocialPlatform
-  likes       Int            @default(0)
-  comments    Int            @default(0)
-  shares      Int            @default(0)
-  impressions Int            @default(0)
-  reach       Int            @default(0)
-  createdAt   DateTime       @default(now())
-}
-
-model Automation {
-  id         Int               @id @default(autoincrement())
-  companyId  Int
-  company    Company           @relation(fields: [companyId], references: [id])
-  trigger    AutomationTrigger
-  action     AutomationAction
-  conditions Json
-  createdAt  DateTime          @default(now())
-  updatedAt  DateTime          @updatedAt
-}
-
-enum AutomationTrigger {
-  NEW_FOLLOWER
-  HASHTAG
-  KEYWORD
-  TIME_BASED
-}
-
-enum AutomationAction {
-  AUTO_POST
-  AUTO_REPLY
-  AUTO_LIKE
-}
-
-model Notification {
-  id         Int              @id @default(autoincrement())
-  userId     Int
-  user       User             @relation(fields: [userId], references: [id])
-  message    String
-  type       NotificationType
-  readStatus Boolean          @default(false)
-  createdAt  DateTime         @default(now())
-}
-
-enum NotificationType {
-  ALERT
-  INFO
-  REMINDER
+model Order {
+  id              Int      @id @default(autoincrement())
+  userId          Int
+  User            User     @relation(fields: [userId], references: [id])
+  productId       Int
+  Product         Product  @relation(fields: [productId], references: [id])
+  amount          Int
+  priceAtPurchase Int
+  adresse         String
+  postal          String
+  housenumber     String
+  city            String
+  premiumShipping Boolean
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
