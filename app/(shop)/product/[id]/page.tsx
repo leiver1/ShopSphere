@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
 
 interface pageProps {}
 
@@ -53,13 +54,39 @@ const page: React.FC<pageProps> = () => {
     getProduct();
   }, []);
 
+  const returnIsInStock = () => {};
+
   return (
     <>
       {product && (
         <>
-          <div className="hidden md:grid   lg:grid-cols-3 w-full mt-10">
+          <div className=" md:grid md:gap-5  lg:grid-cols-3 w-full mt-10">
+            {/* SMARTPHONE IMAGES CAROUSEL */}
+            <div className="block md:hidden mb-4">
+              <Carousel>
+                <CarouselContent>
+                  {product.Images.map((image, index: number) => (
+                    <CarouselItem key={index}>
+                      <Card className="m-0 p-0">
+                        <CardContent className="p-0">
+                          <img
+                            src={image.src}
+                            alt="ProductImage "
+                            className="w-full h-96 object-cover object-center rounded-md"
+                          />
+                        </CardContent>
+                      </Card>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious />
+                <CarouselNext />
+              </Carousel>
+            </div>
+
+            {/* NORMAL IMAGES CLICKABEL */}
             <div className="md:grid hidden gap-6   md:grid-cols-5 w-full  col-span-2">
-              <div className="grid gap-2 md:col-span-1  max-h-[515px] overflow-scroll p-1">
+              <div className="md:grid gap-2 md:col-span-1 hidden  max-h-[515px] overflow-scroll p-1">
                 {product.Images.map((image, index) => (
                   <img
                     key={index}
@@ -75,11 +102,13 @@ const page: React.FC<pageProps> = () => {
                 <img
                   src={product.Images[selectedImage].src}
                   alt="lolo"
-                  className="w-full h-full object-center object-cover max-h-[515px] rounded-md"
+                  className="w-full h-[515px] object-center object-cover rounded-md"
                 />
               </div>
             </div>
-            <div className="px-14 grid gap-1 h-full">
+
+            {/* PRODUCT INFO  */}
+            <div className="lg:px-14  md:px-4 grid gap-5 h-full ">
               <div>
                 <h3 className=" text-2xl">{product.title}</h3>
                 <div className="flex items-center gap-1">
@@ -98,6 +127,20 @@ const page: React.FC<pageProps> = () => {
                 adflkasdjf j fsjd fkljsdf jskldf klsdfkl js f
                 dsfkjslkdfjklsjdfklsdjflksdjfklsdklfskldfjsldf
               </p>
+              <div className="flex items-center gap-2">
+                <Badge
+                  className={`${
+                    product.stock > 0
+                      ? "bg-green-500"
+                      : "bg-secondary-foreground"
+                  } hover:bg-secondary-foreground`}
+                >
+                  {product.stock > 0 ? "In Stock" : "Out of Stock"}
+                </Badge>
+                <p className="text-xs text-muted-foreground">
+                  ({product.stock})
+                </p>
+              </div>
               <div>
                 <p className="text-2xl">233.98€</p>
                 <div className="flex items-center gap-3">
@@ -179,29 +222,7 @@ const page: React.FC<pageProps> = () => {
             </div>
           </div>
 
-          <div className=" md:hidden  grid gap-3">
-            <div>
-              <Carousel>
-                <CarouselContent>
-                  {product.Images.map((image, index: number) => (
-                    <CarouselItem key={index}>
-                      <Card className="m-0 p-0">
-                        <CardContent className="p-0">
-                          <img
-                            src={image.src}
-                            alt="ProductImage "
-                            className="w-full h-96 object-cover object-center rounded-md"
-                          />
-                        </CardContent>
-                      </Card>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-                <CarouselPrevious />
-                <CarouselNext />
-              </Carousel>
-            </div>
-
+          <div className=" hidden  ">
             <div className="">fds</div>
           </div>
         </>

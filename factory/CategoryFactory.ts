@@ -5,7 +5,7 @@ const CategoryFactory = async () => {
   await prisma.category.deleteMany();
 
   const categories = [
-    { name: "Clothing", href: "/clothing", icon: "lucide:t-shirt" },
+    { name: "Clothing", href: "/clothing", icon: "gravity-ui:t-shirt" },
     { name: "Electronics", href: "/electronics", icon: "lucide:cpu" },
     { name: "Furniture", href: "/furniture", icon: "lucide:sofa" },
     { name: "Books", href: "/books", icon: "lucide:book-open" },

@@ -24,13 +24,12 @@ import { ChevronsUpDown, Loader2, Plus } from "lucide-react";
 import { Button } from "../button";
 
 import { enqueueSnackbar } from "notistack";
-import { useUserPreference } from "@/context/UserPreferenceContext";
+
 import { Icon } from "@iconify/react/dist/iconify.js";
 
 const PlatformSelector = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false); // State for dialog
   const { isMobile } = useSidebar();
-  const { handleUserPreference, userPreference } = useUserPreference();
 
   return (
     <>

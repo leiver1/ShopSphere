@@ -7,6 +7,7 @@ import LoadingProvider from "@/provider/LoadingProvider";
 import UserPreferenceProvider from "@/context/UserPreferenceContext";
 import { useSession } from "next-auth/react";
 import Loading from "@/components/ui/animation/Loading";
+import OrderProvider from "@/context/OrderContext";
 
 interface RootLayoutProps {
   children: ReactNode;
@@ -21,9 +22,11 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <SessionProviders>
             <SnackbarProvider>
               <UserPreferenceProvider>
-                <ThemeProvider>
-                  <LoadingProvider>{children}</LoadingProvider>
-                </ThemeProvider>
+                <OrderProvider>
+                  <ThemeProvider>
+                    <LoadingProvider>{children}</LoadingProvider>
+                  </ThemeProvider>
+                </OrderProvider>
               </UserPreferenceProvider>
             </SnackbarProvider>
           </SessionProviders>

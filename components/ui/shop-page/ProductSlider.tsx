@@ -22,7 +22,7 @@ const ProductSlider: React.FC<ProductSliderType> = ({
 }) => {
   return (
     <>
-      <h3 className="text-xl mb-4">{sliderName}</h3>
+      <h3 className="text-xl">{sliderName}</h3>
 
       <div className="">
         <Carousel

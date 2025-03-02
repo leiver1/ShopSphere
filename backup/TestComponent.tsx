@@ -52,6 +52,12 @@ export const TestComponent: React.FC<NavigationType> = ({ categories }) => {
           <NavigationMenuTrigger>Categories</NavigationMenuTrigger>
           <NavigationMenuContent>
             <div style={{ width: "240px", padding: "12px" }}>
+              <DivItem
+                href={`/category/${"all"}`}
+                title={"All"}
+                icon="lucide:sparkles"
+              />
+
               {categories &&
                 categories.map((category, index) => (
                   <DivItem

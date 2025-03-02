@@ -27,7 +27,7 @@ const CallToAction: React.FC<CallToActionProps> = () => {
           next level!
         </p>
         <Button
-          className="w-24 mt-3"
+          className="w-24 mt-3 transition hover:scale-105"
           onClick={() => router.push("/register?isVendor=true")}
         >
           {" "}

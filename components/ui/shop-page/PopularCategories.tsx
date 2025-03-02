@@ -29,13 +29,13 @@ const PopularCategories: React.FC<PopularCategoriesProps> = () => {
 
   return (
     <div className="w-full overflow-scroll">
-      <h3 className="text-lg mb-4">Popular Categories</h3>
-      <div className=" grid sm:grid-cols-3 grid-cols-2 lg:grid-cols-6 gap-5">
+      <h3 className="text-xl mb-4">Popular Categories</h3>
+      <div className=" grid sm:grid-cols-3 grid-cols-2 lg:grid-cols-6 gap-5 py-2 ">
         {categories &&
           categories.map((category, index) => (
             <Button
               variant="outline"
-              className="block p-4 h-26 rounded-lg "
+              className="block p-4 h-26 rounded-lg transition hover:scale-105"
               key={index}
               onClick={() =>
                 router.push(`/category/${category.href}?id=${category.id}`)
