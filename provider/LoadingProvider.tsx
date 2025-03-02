@@ -8,7 +8,11 @@ interface LoadingProviderProps {
   children: ReactNode;
 }
 const LoadingProvider: React.FC<LoadingProviderProps> = ({ children }) => {
-  const { data: status } = useSession();
+  const { data: session, status } = useSession();
+
+  if (status === "loading") {
+    alert("looooading");
+  }
   return <div>{status === "loading" ? <Loading /> : children}</div>;
 };
 

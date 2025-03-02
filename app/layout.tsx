@@ -5,6 +5,8 @@ import SessionProviders from "../provider/AuthSessionProvider";
 import SnackbarProvider from "@/provider/SnackbarProvider";
 import LoadingProvider from "@/provider/LoadingProvider";
 import UserPreferenceProvider from "@/context/UserPreferenceContext";
+import { useSession } from "next-auth/react";
+import Loading from "@/components/ui/animation/Loading";
 
 interface RootLayoutProps {
   children: ReactNode;

@@ -43,7 +43,6 @@ const SnackbarProvider: React.FC<SnackbarProviderProps> = ({ children }) => {
       >
         {children}
       </SnProvider>
-      ;
     </div>
   );
 };

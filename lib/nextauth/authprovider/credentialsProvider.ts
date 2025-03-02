@@ -39,6 +39,7 @@ export const configuredCredentialsProvider = CredentialsProvider({
     );
 
     if (!isValidPassword) {
+      console.log("GRRRRRRRRRR WRONG PASSWORD?");
       return null;
     }
 

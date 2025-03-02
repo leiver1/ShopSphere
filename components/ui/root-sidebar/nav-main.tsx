@@ -26,6 +26,7 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import { useRouter } from "next/navigation";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 export function NavMain({}: {}) {
   const router = useRouter();
@@ -34,7 +35,7 @@ export function NavMain({}: {}) {
     {
       title: "Customers",
       url: "",
-      icon: SquareMousePointer,
+      icon: "lucide:users",
       isActive: false,
       items: [
         {
@@ -56,7 +57,7 @@ export function NavMain({}: {}) {
     {
       title: "Orders",
       url: "",
-      icon: ChartArea,
+      icon: "lucide:shopping-bag",
       isActive: false,
       items: [
         {
@@ -121,7 +122,7 @@ export function NavMain({}: {}) {
             className="cursor-pointer"
           >
             <p>
-              <LayoutDashboard />
+              <Icon icon="lucide:package" />
               Products
             </p>
           </SidebarMenuButton>
@@ -136,7 +137,7 @@ export function NavMain({}: {}) {
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
                 <SidebarMenuButton tooltip={item.title}>
-                  {item.icon && <item.icon />}
+                  {item.icon && <Icon icon={item.icon} />}
                   <span>{item.title}</span>
                   <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                 </SidebarMenuButton>
@@ -169,7 +170,7 @@ export function NavMain({}: {}) {
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
                 <SidebarMenuButton tooltip={item.title}>
-                  {item.icon && <item.icon />}
+                  {item.icon && <Icon icon={item.icon} />}
                   <span>{item.title}</span>
                   <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                 </SidebarMenuButton>
@@ -199,7 +200,7 @@ export function NavMain({}: {}) {
             onClick={() => router.push("/marketing")}
           >
             <p>
-              <Inbox />
+              <Icon icon="lucide:megaphone" />
               Marketing
             </p>
           </SidebarMenuButton>

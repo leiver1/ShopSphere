@@ -68,7 +68,11 @@ const LoginForm: React.FC<LoginFormProps> = () => {
 
       enqueueSnackbar(snackbar);
 
-      router.push("/dashboard");
+      if (session?.user?.role === "VENDOR") {
+        router.push("/dashboard");
+      } else {
+        router.push("/");
+      }
     }
   };
 
@@ -178,6 +182,17 @@ const LoginForm: React.FC<LoginFormProps> = () => {
                 style={{ width: "33px", height: "28px" }}
               />
             </Button>
+          </div>
+          <div className="flex items-center justify-center gap-1">
+            <p className="text-xs text-muted-foreground ">
+              Don´t have an account?
+            </p>
+            <p
+              className="text-xs underline font-semibold text-muted-foreground hover:cursor-pointer "
+              onClick={() => router.push("/register")}
+            >
+              Sign up
+            </p>
           </div>
         </div>
       </form>

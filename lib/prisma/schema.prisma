@@ -13,30 +13,47 @@ model User {
   lastname     String
   email        String          @unique
   password     String
+  companyName  String?
+  companyNiche String?
   role         Role            @default(CUSTOMER)
   createdAt    DateTime        @default(now())
   updatedAt    DateTime        @updatedAt
   ProductRevew ProductReview[]
   Orders       Order[]
+  Product      Product[]
 }
 
 enum Role {
   CUSTOMER
-  SELLER
+  VENDOR
+}
+
+model Category {
+  id       Int       @id @default(autoincrement())
+  href     String
+  icon     String
+  name     String
+  Products Product[]
 }
 
 model Product {
   id               Int                @id @default(autoincrement())
   title            String
+  subtitle         String
   description      String             @db.Text
   price            Int
-  images           ProductImage[]
-  reviews          ProductReview[]
-  Orders           Order[]
-  ProductChoosable ProductChoosable[]
   stock            Int
   createdAt        DateTime           @default(now())
   updatedAt        DateTime           @updatedAt
+  userId           Int?
+  User             User?              @relation(fields: [userId], references: [id])
+  OrderItem        OrderItem[]
+  Images           ProductImage[]
+  Reviews          ProductReview[]
+  Orders           Order[]
+  ProductChoosable ProductChoosable[]
+  Category         Category?          @relation(fields: [categoryId], references: [id])
+  categoryId       Int?
 }
 
 // like Size:
@@ -45,7 +62,7 @@ model ProductChoosable {
   productId      Int
   Product        Product          @relation(fields: [productId], references: [id])
   title          String
-  inputChoosable InputChoosable[]
+  InputChoosable InputChoosable[]
 }
 
 //input like /M/S/XL/L...
@@ -66,6 +83,7 @@ model ProductImage {
 model ProductReview {
   id        Int      @id @default(autoincrement())
   rating    Int
+  title     String
   text      String   @db.Text
   User      User     @relation(fields: [userId], references: [id])
   userId    Int
@@ -76,18 +94,27 @@ model ProductReview {
 }
 
 model Order {
-  id              Int      @id @default(autoincrement())
+  id              Int         @id @default(autoincrement())
   userId          Int
-  User            User     @relation(fields: [userId], references: [id])
-  productId       Int
-  Product         Product  @relation(fields: [productId], references: [id])
-  amount          Int
-  priceAtPurchase Int
+  User            User        @relation(fields: [userId], references: [id])
+  OrderItems      OrderItem[]
   adresse         String
   postal          String
   housenumber     String
   city            String
   premiumShipping Boolean
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  Product         Product?    @relation(fields: [productId], references: [id])
+  productId       Int?
+}
+
+model OrderItem {
+  id              Int     @id @default(autoincrement())
+  orderId         Int
+  Order           Order   @relation(fields: [orderId], references: [id])
+  productId       Int
+  Product         Product @relation(fields: [productId], references: [id])
+  amount          Int
+  priceAtPurchase Int
 }
