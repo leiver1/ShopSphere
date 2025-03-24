@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useEffect, useState } from "react";
+import { useCartContext } from "@/context/CartContext";
 
 interface ShopHeaderProps {}
 
@@ -13,6 +14,8 @@ const ShopHeader: React.FC<ShopHeaderProps> = () => {
   const [categories, setCategories] = useState<[]>([]);
   const { data: session } = useSession();
   const router = useRouter();
+
+  const { cartItem } = useCartContext();
 
   const handleAccountRouting = () => {
     if (session?.user?.role === "VENDOR") {
@@ -75,10 +78,21 @@ const ShopHeader: React.FC<ShopHeaderProps> = () => {
             <span className="hidden sm:inline">Account</span>
           </Button>
         )}
-        <Button variant="ghost">
-          <Icon icon="lucide:shopping-cart" />
-          <span className="hidden sm:inline">Cart</span>
-        </Button>
+        <div className="relative p-2">
+          <Button
+            variant="ghost"
+            className="bg-secondary text-secondary-foreground"
+            onClick={() => router.push("/cart")}
+          >
+            <Icon icon="lucide:shopping-cart" />
+            <span className="hidden sm:inline">Cart</span>
+          </Button>
+          {cartItem.length > 0 && (
+            <span className=" text-xs bg-primary text-primary-foreground border px-1  rounded-full absolute top-0 right-0 ">
+              {cartItem.length}
+            </span>
+          )}
+        </div>
       </div>
     </header>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { Product } from "@prisma/client";
 import {
   Carousel,
@@ -25,16 +25,22 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
+import { CartItem, useCartContext } from "@/context/CartContext";
+import { enqueueSnackbar } from "notistack";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface pageProps {}
 
 const page: React.FC<pageProps> = () => {
   const [selectedImage, setSelectedImage] = useState<number>(0);
+  const [amount, setAmount] = useState<number>(1);
   const [product, setProduct] = useState<Product | undefined>();
+  const { addCartItem } = useCartContext();
   const param = useParams();
   const id = param.id;
 
-  console.log(id);
+  const router = useRouter();
 
   useEffect(() => {
     const getProduct = async () => {
@@ -54,7 +60,36 @@ const page: React.FC<pageProps> = () => {
     getProduct();
   }, []);
 
-  const returnIsInStock = () => {};
+  const addToCart = () => {
+    const price = (product?.price as number) * amount;
+    const cartItem: CartItem = {
+      product: product as Product,
+      amount: amount,
+      price,
+    };
+    addCartItem(cartItem);
+
+    toast(`${product?.title} (${amount}) added to your cart`, {
+      description: "Check your cart to review your items.",
+      action: {
+        label: "View Cart",
+        onClick: () => router.push("/cart"),
+      },
+    });
+
+    // const snackbar = {
+    //   message: `${product?.title} (${amount}) added to cart`,
+    //   anchorOrigin: {
+    //     vertical: "bottom" as "bottom",
+    //     horizontal: "right" as "right",
+    //   },
+
+    //   variant: "success" as "success",
+    //   autoHideDuration: 3000,
+    // };
+
+    // enqueueSnackbar(snackbar);
+  };
 
   return (
     <>
@@ -188,7 +223,9 @@ const page: React.FC<pageProps> = () => {
                     ))}
                 </div>
                 <div className="mt-3">
-                  <Select>
+                  <Select
+                    onValueChange={(amount) => setAmount(Number(amount + 1))}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Amount" />
                     </SelectTrigger>
@@ -214,7 +251,7 @@ const page: React.FC<pageProps> = () => {
                 </label>
               </div>
               <div>
-                <Button>
+                <Button onClick={() => addToCart()}>
                   <Icon icon="lucide:shopping-cart" />
                   Add to Cart
                 </Button>
