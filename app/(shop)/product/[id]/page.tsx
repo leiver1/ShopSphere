@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { useEffect, useState, useSyncExternalStore } from "react";
-import { Product } from "@prisma/client";
+
 import {
   Carousel,
   CarouselContent,
@@ -29,6 +29,7 @@ import { CartItem, useCartContext } from "@/context/CartContext";
 import { enqueueSnackbar } from "notistack";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { Product } from "@/types/ProductType";
 
 interface pageProps {}
 
@@ -100,19 +101,20 @@ const page: React.FC<pageProps> = () => {
             <div className="block md:hidden mb-4">
               <Carousel>
                 <CarouselContent>
-                  {product.Images.map((image, index: number) => (
-                    <CarouselItem key={index}>
-                      <Card className="m-0 p-0">
-                        <CardContent className="p-0">
-                          <img
-                            src={image.src}
-                            alt="ProductImage "
-                            className="w-full h-96 object-cover object-center rounded-md"
-                          />
-                        </CardContent>
-                      </Card>
-                    </CarouselItem>
-                  ))}
+                  {product.Images &&
+                    product.Images.map((image, index: number) => (
+                      <CarouselItem key={index}>
+                        <Card className="m-0 p-0">
+                          <CardContent className="p-0">
+                            <img
+                              src={image.src}
+                              alt="ProductImage "
+                              className="w-full h-96 object-cover object-center rounded-md"
+                            />
+                          </CardContent>
+                        </Card>
+                      </CarouselItem>
+                    ))}
                 </CarouselContent>
                 <CarouselPrevious />
                 <CarouselNext />
@@ -122,20 +124,21 @@ const page: React.FC<pageProps> = () => {
             {/* NORMAL IMAGES CLICKABEL */}
             <div className="md:grid hidden gap-6   md:grid-cols-5 w-full  col-span-2">
               <div className="md:grid gap-2 md:col-span-1 hidden  max-h-[515px] overflow-scroll p-1">
-                {product.Images.map((image, index) => (
-                  <img
-                    key={index}
-                    src={image.src}
-                    onClick={() => setSelectedImage(index)}
-                    alt="lol"
-                    className="h-24 object-cover w-full transition hover:scale-105 cursor-pointer object-center rounded-md"
-                  />
-                ))}
+                {product.Images &&
+                  product.Images.map((image, index) => (
+                    <img
+                      key={index}
+                      src={image.src}
+                      onClick={() => setSelectedImage(index)}
+                      alt="lol"
+                      className="h-24 object-cover w-full transition hover:scale-105 cursor-pointer object-center rounded-md"
+                    />
+                  ))}
               </div>
 
               <div className=" md:col-span-4">
                 <img
-                  src={product.Images[selectedImage].src}
+                  src={product.Images && product.Images[selectedImage].src}
                   alt="lolo"
                   className="w-full h-[515px] object-center object-cover rounded-md"
                 />

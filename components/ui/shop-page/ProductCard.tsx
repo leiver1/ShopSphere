@@ -1,11 +1,11 @@
 "use client";
 
-import { Product } from "@prisma/client";
 import { Card, CardContent } from "../card";
 import { Button } from "../button";
 import StarRatingBasic from "@/components/commerce-ui/star-rating-basic";
 import { cn } from "@/lib/utils"; // Falls du Tailwind Merge nutzt
 import { useRouter } from "next/navigation";
+import { Product } from "@/types/ProductType";
 
 interface ProductCardProps {
   product?: Product;
@@ -29,7 +29,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, className }) => {
         {/* Bildcontainer mit fester Höhe */}
         <div className="bg-secondary p-0 flex items-center justify-center rounded-lg h-[180px] w-full">
           <img
-            src={product?.Images[0]?.src || "/placeholder.jpg"} // Fallback-Bild für leere Einträge
+            src={
+              (product?.Images && product?.Images[0]?.src) || "/placeholder.jpg"
+            } // Fallback-Bild für leere Einträge
             alt="product-image"
             className="w-full h-full object-cover rounded-t-md"
           />
@@ -50,7 +52,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, className }) => {
           {/* Sternebewertung */}
           <div className="flex items-center gap-1 mt-auto">
             <StarRatingBasic
-              value={product?.averageRating}
+              value={
+                (product?.averageRating as number) &&
+                (product?.averageRating as number)
+              }
               color="orange"
               iconSize={14}
               readOnly

@@ -78,6 +78,7 @@ model ProductImage {
   productId Int
   Product   Product? @relation(fields: [productId], references: [id])
   src       String
+  alt       String
 }
 
 model ProductReview {

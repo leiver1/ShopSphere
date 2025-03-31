@@ -2,8 +2,7 @@
 
 import { useSession } from "next-auth/react";
 
-interface pageProps {}
-const page: React.FC<pageProps> = () => {
+const page = () => {
   const { data: session, status } = useSession();
 
   console.log(session?.user?.role);

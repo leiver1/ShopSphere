@@ -1,15 +1,6 @@
-import { Button } from "../button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../card";
+import { Card, CardContent, CardHeader, CardTitle } from "../card";
 
-interface ThreBigProductProps {}
-
-const ThreeBigProduct: React.FC<ThreBigProductProps> = () => {
+const ThreeBigProduct = () => {
   return (
     <div className="w-full grid grid-cols-1  lg:grid-cols-2 gap-4">
       {/* Linke Spalte mit zwei gleich großen Elementen */}

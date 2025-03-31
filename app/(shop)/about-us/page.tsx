@@ -1,9 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { ArrowRight, CheckCircle, Globe, Heart, Users } from "lucide-react";
+import { ArrowRight, CheckCircle, Heart, Users } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function AboutUs() {
   return (

@@ -5,7 +5,7 @@ import UserFactory from "../../factory/UserFactory";
 const main = async () => {
   await CategoryFactory();
   await UserFactory();
-  await ProductFactory(350);
+  await ProductFactory(12);
 };
 
 main();

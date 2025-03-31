@@ -32,7 +32,7 @@ export const GET = async () => {
     }
 
     return NextResponse.json({ data: products });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error fetching products:", error);
     return NextResponse.json(
       { error: "Internal Server Error", details: error.message },

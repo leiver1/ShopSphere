@@ -1,5 +1,4 @@
-interface pageProps {}
-const page: React.FC<pageProps> = () => {
+const page = () => {
   return <div>page</div>;
 };
 

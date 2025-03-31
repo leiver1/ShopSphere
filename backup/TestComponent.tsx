@@ -10,7 +10,7 @@ import React from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Icon } from "@iconify/react/dist/iconify.js";
-
+import { Category } from "@prisma/client";
 interface ListItemProps {
   title: string;
   href: string;
@@ -19,7 +19,7 @@ interface ListItemProps {
   icon?: string;
 }
 interface NavigationType {
-  categories: [];
+  categories: Category[];
 }
 
 const DivItem: React.FC<ListItemProps> = ({

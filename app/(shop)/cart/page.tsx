@@ -67,7 +67,10 @@ const page: React.FC<pageProps> = () => {
           <div key={index} className="p-3 border-t  grid grid-cols-5 gap-4">
             <div className="grid grid-cols-2 gap-3  place-items-center">
               <div className="border ">
-                <img src={item.product.Images[0].src} className="w-full h-24" />
+                <img
+                  src={item.product.Images && item.product.Images[0].src}
+                  className="w-full h-24"
+                />
               </div>
               <div className="text-md ">
                 <p>{item.product.title}</p>
@@ -76,11 +79,15 @@ const page: React.FC<pageProps> = () => {
                 </p>
               </div>
             </div>
-            {item.product.ProductChoosable.length > 0 &&
+            {item.product.ProductChoosable &&
+              item.product.ProductChoosable.length > 0 &&
               item.product.ProductChoosable.map((choosable, index) => (
                 <div
                   key={index}
-                  className={`grid cols-${item.product.ProductChoosable.length} gap-1 grid place-items-center`}
+                  className={`grid cols-${
+                    item.product.ProductChoosable &&
+                    item.product.ProductChoosable.length
+                  } gap-1 grid place-items-center`}
                 >
                   <Select>
                     <SelectTrigger className="w-2/4 shadow-none">

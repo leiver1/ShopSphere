@@ -1,10 +1,9 @@
 // app/middleware.js
-import { withAuth } from "next-auth/middleware";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { protectedRoutes } from "./lib/nextauth/protectedRoutes";
 
 // Definiere, auf welche Routen die Authentifizierung angewendet werden soll
-export function middleware(req) {
+export function middleware(req: NextRequest) {
   // Routen, die Authentifizierung benötigen (hier ein Beispiel für eine Admin-Seite)
   const url = req.nextUrl.clone();
   // Prüfe, ob die Anfrage eine geschützte Route ist

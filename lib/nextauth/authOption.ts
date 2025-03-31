@@ -1,12 +1,15 @@
-import { Account, AuthOptions, Profile, Session, User } from "next-auth";
+import { AuthOptions } from "next-auth";
 import jwt from "jsonwebtoken";
-import { JWT } from "next-auth/jwt";
 import { configuredCredentialsProvider } from "./authprovider/credentialsProvider";
 
-import prisma from "@/lib/prisma/prismaClient";
-
-interface UserWithTokens extends User {
-  facebookAccessToken?: string | null | undefined;
+declare module "next-auth/jwt" {
+  interface JWT {
+    id: string;
+    email: string;
+    name: string;
+    companyId?: string;
+    role?: string;
+  }
 }
 
 export const authOptions: AuthOptions = {
@@ -49,7 +52,7 @@ export const authOptions: AuthOptions = {
   callbacks: {
     async jwt({ user, account, token, isNewUser, profile }) {
       if (user) {
-        token.email = user.email;
+        token.email = user.email as string;
         token.name = `${user.firstname} ${user.lastname}`;
         token.id = user.id;
         token.companyId = user.companyId;
